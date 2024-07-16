@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <cmath> 
 using namespace std;
 
 // Part 1: Creating dynamic array
@@ -76,6 +77,7 @@ public:
     Triangle(Point*, Point*, Point*);
     int translate(int d, char axis);
     void display();
+    double calcArea(); // Function to calculate the area of the triangle
     ~Triangle(); // Destructor to clean up
 };
 
@@ -108,6 +110,29 @@ void Triangle::display() {
     vertex_1->display();
     vertex_2->display();
     vertex_3->display();
+}
+
+// Function to calculate the area of the triangle
+double Triangle::calcArea() {
+    // Vector AB
+    int ABx = vertex_2->x - vertex_1->x;
+    int ABy = vertex_2->y - vertex_1->y;
+    int ABz = vertex_2->z - vertex_1->z;
+
+    // Vector AC
+    int ACx = vertex_3->x - vertex_1->x;
+    int ACy = vertex_3->y - vertex_1->y;
+    int ACz = vertex_3->z - vertex_1->z;
+
+    // Cross product AB x AC
+    int cross_x = ABy * ACz - ABz * ACy;
+    int cross_y = ABz * ACx - ABx * ACz;
+    int cross_z = ABx * ACy - ABy * ACx;
+
+    // Area of the triangle is half the magnitude of the cross product
+    double area = 0.5 * sqrt(cross_x * cross_x + cross_y * cross_y + cross_z * cross_z);
+
+    return area;
 }
 
 // Destructor to clean up dynamically allocated points
@@ -161,6 +186,8 @@ int main() {
         cout << "Triangle after translation:\n";
         triangle->display();
     }
+
+    cout << "The area of the triangle is: " << triangle->calcArea() << endl;
 
     // Clean up dynamically allocated memory
     delete triangle;
